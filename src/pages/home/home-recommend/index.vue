@@ -8,8 +8,8 @@
       <view class="recommend_item"
             v-for="item in recommends"
             :key="item.id">
-        <img mode="widthFix"
-             :src="item.thumb">
+        <image mode="widthFix"
+               :src="item.thumb">
       </view>
     </view>
     <!-- 月份 -->
@@ -28,8 +28,9 @@
         <view class="monthes_item"
               v-for="item in monthes.items"
               :key="item.id">
-          <img mode='aspectFill'
-               :src="item.thumb+item.rule.replace('$<Height>',360)"></view>
+          <image mode='aspectFill'
+                 :src="item.thumb+item.rule.replace('$<Height>',360)">
+        </view>
       </view>
     </view>
     <!-- 热门 -->
@@ -41,8 +42,8 @@
         <view class="hots_item"
               v-for="item in hots"
               :key="item.id">
-          <img mode='widthFix'
-               :src="item.thumb">
+          <image mode='widthFix'
+                 :src="item.thumb">
         </view>
       </view>
     </view>
@@ -72,39 +73,35 @@ export default {
     this.getList()
   },
   methods: {
-    getList () {
-      this.request({
+    async getList () {
+      const { res } = await this.request({
         url: 'http://157.122.54.189:9088/image/v3/homepage/vertical',
         data: this.params
-      }).then(res => {
-
-        if (res.res.vertical === 0) {
-          this.hasMore = false;
-          return;
-        }
-
-        if (this.recommends.length === 0) {
-          // console.log(res.res.homepage[1].items);
-          this.recommends = res.res.homepage[1].items;
-          this.monthes = res.res.homepage[2];
-          // console.log(res.res.homepage[2]);
-          this.monthes.MM = moment(this.monthes.stime).format('MM')
-          this.monthes.DD = moment(this.monthes.stime).format('DD')
-        } else {
-          this.hots = [...this.hots, ...res.res.vertical];
-        }
       })
+      // 	“热门” 列表
+      if (res.vertical === 0) {
+        this.hasMore = false;
+        this.showToast()
+        return;
+      }
+      if (this.recommends.length === 0) {
+        // console.log(res.homepage[1].items);
+        this.recommends = res.homepage[1].items;
+        this.monthes = res.homepage[2];
+        // console.log(res.homepage[2]);
+        this.monthes.MM = moment(this.monthes.stime).format('MM')
+        this.monthes.DD = moment(this.monthes.stime).format('DD')
+      } else {
+        this.hots = [...this.hots, ...res.vertical];
+      }
+
     },
     handleTolower () {
-
       if (this.hasMore) {
         this.params.skip += this.params.limit;
         this.getList();
       } else {
-        uni.showModal({
-          title: '到底啦~~',
-          icon: 'none'
-        })
+        this.showToast()
       }
     }
   }
@@ -178,8 +175,6 @@ export default {
     .hots_item {
       width: 33.33%;
       border: 5rpx solid #fff;
-      img {
-      }
     }
   }
 }

@@ -4,6 +4,12 @@ import request from './utils/request'
 
 Vue.config.productionTip = false
 Vue.prototype.request = request
+Vue.prototype.showToast = () => {
+  uni.showToast({
+    title: '到底啦~~',
+    icon: 'none'
+  })
+}
 
 App.mpType = 'app'
 
