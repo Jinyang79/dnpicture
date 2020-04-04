@@ -13,6 +13,12 @@
       }
     },
     {
+      "path": "pages/imgDetail/index",
+      "style": {
+        "navigationBarTitleText": "图片详情"
+      }
+    },
+    {
       "path": "pages/horizontal/index",
       "style": {
         "navigationBarTitleText": "横屏"

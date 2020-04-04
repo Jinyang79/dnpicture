@@ -5,12 +5,13 @@
                v-if="recommends.length>0">
     <!-- 推荐 -->
     <view class="recommend_wrap">
-      <view class="recommend_item"
-            v-for="item in recommends"
-            :key="item.id">
+      <navigator class="recommend_item"
+                 v-for="item in recommends"
+                 :key="item.id"
+                 :url="`/pages/album/index?id=${item.target}`">
         <image mode="widthFix"
                :src="item.thumb">
-      </view>
+      </navigator>
     </view>
     <!-- 月份 -->
     <view class="monthes_wrap">
@@ -26,10 +27,15 @@
       </view>
       <view class="monthes_content">
         <view class="monthes_item"
-              v-for="item in monthes.items"
+              v-for="(item,index) in monthes.items"
               :key="item.id">
-          <image mode='aspectFill'
-                 :src="item.thumb+item.rule.replace('$<Height>',360)">
+          <!-- 父传子 -->
+          <go-detail :list='monthes.items'
+                     :index='index'>
+            <image mode='aspectFill'
+                   :src="item.thumb+item.rule.replace('$<Height>',360)">
+            </image>
+          </go-detail>
         </view>
       </view>
     </view>
@@ -40,10 +46,14 @@
       </view>
       <view class="hots_content">
         <view class="hots_item"
-              v-for="item in hots"
+              v-for="(item,index) in hots"
               :key="item.id">
-          <image mode='widthFix'
-                 :src="item.thumb">
+          <go-detail :list='monthes.items'
+                     :index='index'>
+            <image mode='widthFix'
+                   :src="item.thumb">
+            </image>
+          </go-detail>
         </view>
       </view>
     </view>
@@ -52,7 +62,11 @@
 
 <script>
 import moment from 'moment';
+import goDetail from "@/components/goDetail";
 export default {
+  components: {
+    goDetail
+  },
   data () {
     return {
       recommends: [],

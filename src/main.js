@@ -4,6 +4,7 @@ import request from './utils/request'
 
 Vue.config.productionTip = false
 Vue.prototype.request = request
+// 到底弹框
 Vue.prototype.showToast = () => {
   uni.showToast({
     title: '到底啦~~',

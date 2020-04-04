@@ -23,15 +23,22 @@
       <view class="album_item"
             v-for="item in wallpaper"
             :key="item.id">
-        <image mode="aspectFill"
-               :src="item.thumb+item.rule.replace('$<Height>',360)"></image>
+        <go-detail :list='monthes.items'
+                   :index='index'>
+          <image mode="aspectFill"
+                 :src="item.thumb+item.rule.replace('$<Height>',360)"></image>
+        </go-detail>
       </view>
     </view>
   </view>
 </template>
 
 <script>
+import goDetail from "@/components/goDetail";
 export default {
+  components: {
+    goDetail
+  },
   data () {
     return {
       params: {
