@@ -48,7 +48,7 @@
         <view class="hots_item"
               v-for="(item,index) in hots"
               :key="item.id">
-          <go-detail :list='monthes.items'
+          <go-detail :list='hots'
                      :index='index'>
             <image mode='widthFix'
                    :src="item.thumb">

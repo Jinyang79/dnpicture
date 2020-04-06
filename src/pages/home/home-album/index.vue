@@ -16,12 +16,15 @@
     <!-- 列表 -->
     <view class="album_list">
       <navigator class="album_item"
-                 v-for="item in album"
+                 v-for="(item,index) in album"
                  :key="item.id"
                  :url='`/pages/album/index?id=${item.id}`'>
         <view class="album_image">
-          <image mode='aspectFill'
-                 :src="item.cover">
+          <go-detail :list='album'
+                     :index='index'>
+            <image mode='aspectFill'
+                   :src="item.cover"></image>
+          </go-detail>
         </view>
         <view class="album_info">
           <view class="album_name">{{item.name}}</view>
@@ -36,6 +39,7 @@
 </template>
 
 <script>
+import goDetail from "@/components/goDetail";
 export default {
   data () {
     return {

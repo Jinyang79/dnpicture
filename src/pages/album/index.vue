@@ -21,9 +21,9 @@
     <!-- 列表 -->
     <view class="album_list">
       <view class="album_item"
-            v-for="item in wallpaper"
+            v-for="(item,index) in wallpaper"
             :key="item.id">
-        <go-detail :list='monthes.items'
+        <go-detail :list='wallpaper'
                    :index='index'>
           <image mode="aspectFill"
                  :src="item.thumb+item.rule.replace('$<Height>',360)"></image>
@@ -76,6 +76,7 @@ export default {
         data: this.params
       })
       // album是对象 Object.keys()返回值是数组
+      console.log(res);
       if (Object.keys(this.album).length === 0) {
         this.album = res.album;
       }
