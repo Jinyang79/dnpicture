@@ -13,27 +13,21 @@
       }
     },
     {
+      "path": "pages/imgCategory/index",
+      "style": {
+        "navigationBarTitleText": "分类详情"
+      }
+    },
+    {
       "path": "pages/imgDetail/index",
       "style": {
         "navigationBarTitleText": "图片详情"
       }
     },
     {
-      "path": "pages/horizontal/index",
-      "style": {
-        "navigationBarTitleText": "横屏"
-      }
-    },
-    {
       "path": "pages/video/index",
       "style": {
         "navigationBarTitleText": "视频"
-      }
-    },
-    {
-      "path": "pages/search/index",
-      "style": {
-        "navigationBarTitleText": "搜索"
       }
     },
     {
@@ -63,22 +57,10 @@
         "selectedIconPath": "./static/icon/home.png"
       },
       {
-        "pagePath": "pages/horizontal/index",
-        "text": "横屏",
-        "iconPath": "./static/icon/_img.png",
-        "selectedIconPath": "./static/icon/img.png"
-      },
-      {
         "pagePath": "pages/video/index",
         "text": "视频",
         "iconPath": "./static/icon/_videocamera.png",
         "selectedIconPath": "./static/icon/videocamera.png"
-      },
-      {
-        "pagePath": "pages/search/index",
-        "text": "搜索",
-        "iconPath": "./static/icon/_search.png",
-        "selectedIconPath": "./static/icon/search.png"
       },
       {
         "pagePath": "pages/mine/index",

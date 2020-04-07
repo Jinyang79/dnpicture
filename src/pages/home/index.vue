@@ -6,10 +6,10 @@
                                :values="items.map(v=>v.title)"
                                @clickItem="onClickItem"
                                style-type="text"
-                               active-color="#d4237a">
+                               active-color="#1A73E8">
         </uni-segmented-control>
       </view>
-      <view class="iconfont iconsearch"></view>
+      <!-- <view class="iconfont iconsearch"></view> -->
     </view>
     <view class="home_tab_content">
       <view v-if="current === 0">
@@ -19,11 +19,7 @@
         <homeCategoty></homeCategoty>
       </view>
       <view v-if="current === 2">
-        <homeNew></homeNew>
-      </view>
-      <view v-if="current === 3">
         <homeAlbum></homeAlbum>
-
       </view>
     </view>
   </view>
@@ -32,7 +28,6 @@
 <script>
 import homeAlbum from './home-album'
 import homeCategoty from './home-categoty'
-import homeNew from './home-new'
 import homeRecommend from './home-recommend'
 import { uniSegmentedControl } from '@dcloudio/uni-ui'
 
@@ -40,7 +35,6 @@ export default {
   components: {
     homeAlbum,
     homeCategoty,
-    homeNew,
     homeRecommend,
     uniSegmentedControl
   },
@@ -49,7 +43,6 @@ export default {
       items: [
         { title: '推荐' },
         { title: '分类' },
-        { title: '最新' },
         { title: '专辑' }],
       current: 0
     }
@@ -64,7 +57,7 @@ export default {
 }
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .home_tab {
   .home_tab_title {
     position: relative;

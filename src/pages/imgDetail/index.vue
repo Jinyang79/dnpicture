@@ -13,8 +13,11 @@
     </view>
     <!-- 大图 -->
     <view class="high_img">
-      <image mode="widthFix"
-             :src="imgDetail.thumb"></image>
+      <!-- 子传父 -->
+      <swiper-action @swiperAction='handleSwiperAction'>
+        <image mode="widthFix"
+               :src="imgDetail.thumb"></image>
+      </swiper-action>
     </view>
     <!-- 点赞 -->
     <view class="user_rank">
@@ -26,7 +29,8 @@
       </view>
     </view>
     <!-- 专辑 -->
-    <view class="album_wrap">
+    <view class="album_wrap"
+          v-if="album.length">
       <view class="album_title">相关</view>
       <view class="album_list">
         <view class="album_item"
@@ -45,7 +49,8 @@
       </view>
     </view>
     <!-- 热评 -->
-    <view class="comment hot">
+    <view class="comment hot"
+          v-if="hot.length">
       <view class="comment_title">
         <text class="iconfont iconhot1"></text>
         <text class="comment_text">最热评论</text>
@@ -84,7 +89,8 @@
       </view>
     </view>
     <!-- 新评论 -->
-    <view class="comment new">
+    <view class="comment new"
+          v-if="comment.length">
       <view class="comment_title">
         <text class="iconfont iconpinglun"></text>
         <text class="comment_text">最新评论</text>
@@ -122,35 +128,52 @@
         </view>
       </view>
     </view>
+    <!-- 下载按钮 -->
+    <view class="download">
+      <view class="download-btn"
+            @click="handleDownload">下载图片</view>
+    </view>
   </view>
 </template>
 
 <script>
 import moment from "moment";
+import swiperAction from "@/components/swiperAction";
 // 设置语言为中文
 moment.locale('zh-cn');
 export default {
+  components: {
+    swiperAction
+  },
   data () {
     return {
+      // 图片信息对象
       imgDetail: {},
       album: [],
       hot: [],
-      comment: []
+      comment: [],
+      // 图片索引
+      imgIndex: 0
     }
   },
   onLoad () {
-    // console.log(getApp().globalData);
-    const { imgList, imgIndex } = getApp().globalData;
-    console.log(imgList[imgIndex]);
-    this.imgDetail = imgList[imgIndex];
-    // 拼接图片路径, onLoad页面加载调用replace()方法会报错
-    // this.imgDetail.newThumb = this.imgDetail.thumb + this.imgDetail.rule.replace("$<Height>", 360);
-    // moment 接收的是毫米
-    // fromNow()实现 显示xx月前
-    this.imgDetail.cnTime = moment(this.imgDetail.atime * 1000).fromNow()
-    this.getComments(this.imgDetail.id)
+    const { imgIndex } = getApp().globalData;
+    this.imgIndex = imgIndex;
+    this.getDate();
   },
   methods: {
+    getDate () {
+      // console.log(getApp().globalData);
+      const { imgList } = getApp().globalData;
+      // console.log(imgList[imgIndex]);
+      this.imgDetail = imgList[this.imgIndex];
+      // 拼接图片路径, onLoad页面加载调用replace()方法会报错
+      // this.imgDetail.newThumb = this.imgDetail.thumb + this.imgDetail.rule.replace("$<Height>", 360);
+      // moment 接收的是毫米
+      // fromNow()实现 显示xx月前
+      this.imgDetail.cnTime = moment(this.imgDetail.atime * 1000).fromNow()
+      this.getComments(this.imgDetail.id)
+    },
     async getComments (id) {
       const { res } = await this.request({
         url: `http://157.122.54.189:9088/image/v2/wallpaper/wallpaper/${id}/comment`
@@ -162,6 +185,42 @@ export default {
       res.comment.forEach(e => e.cnTime = moment(e.atime * 1000).fromNow());
       this.hot = res.hot;
       this.comment = res.comment;
+
+    },
+    // 滑动事件
+    handleSwiperAction (e) {
+      // 左滑 imgIndex++
+      // 右滑 imgIndex--
+      // 判断是否超过数组长度
+      const { imgList } = getApp().globalData;
+      if (e.direction === 'left' && this.imgIndex < imgList.length - 1) {
+        this.imgIndex++;
+        this.getDate();
+      } else if (e.direction === 'right' && this.imgIndex > 0) {
+        this.imgIndex--;
+        this.getDate();
+      } else {
+        this.showToast()
+      }
+    },
+    async handleDownload () {
+      // 1.下载远程文件到小程序的内存中 tempFilePath 
+      await uni.showLoading({
+        title: '下载中'
+      })
+
+      const res1 = await uni.downloadFile({ url: this.imgDetail.img })
+      // console.log(res);
+      const { tempFilePath } = res1[1]
+
+      // 2.将图片从内存中下载到本地
+      const res2 = await uni.saveImageToPhotosAlbum({ filePath: tempFilePath })
+      // console.log(res2);
+
+      uni.hideLoading();
+      await uni.showToast({
+        title: '下载成功'
+      })
 
     }
   }
@@ -213,6 +272,9 @@ export default {
     .iconfont {
     }
   }
+}
+.high_img {
+  border-bottom: 1rpx solid #eee;
 }
 .album_wrap {
   padding: 20rpx;
@@ -313,6 +375,8 @@ export default {
 
       .user_badge {
         image {
+          display: inline-block;
+          margin-right: 10rpx;
           width: 40rpx;
           height: 40rpx;
         }
@@ -329,8 +393,11 @@ export default {
       }
 
       .comment_like {
-        text-align: right;
-        .iconfont.icon {
+        position: relative;
+        .iconfont {
+          position: absolute;
+          right: 20rpx;
+          font-size: 38rpx;
         }
       }
     }
@@ -339,6 +406,23 @@ export default {
 .new {
   .iconpinglun {
     color: aqua !important;
+  }
+}
+.download {
+  height: 120rpx;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  .download-btn {
+    width: 90%;
+    height: 75%;
+    background-color: $color;
+    color: #fff;
+    font-size: 50rpx;
+    font-weight: 600;
+    display: flex;
+    justify-content: center;
+    align-items: center;
   }
 }
 </style>
