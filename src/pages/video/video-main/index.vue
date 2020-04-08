@@ -2,10 +2,11 @@
   <scroll-view class="video_main"
                enable-flex
                scroll-y
-               @scrolltolower="handleTolower">
+               @scrolltolower="handleScrollTolower">
     <view class="video_item"
           v-for="item in videowp"
-          :key="item.id">
+          :key="item.id"
+          @click="handleGoVideo(item)">
       <image :src="item.img"
              mode="widthFix" />
     </view>
@@ -19,11 +20,14 @@ export default {
   },
   data () {
     return {
-      videowp: []
+      videowp: [],
+      hasMore: true
     }
   },
   watch: {
+    // 监听 urlobj 改变
     urlobj () {
+      this.videowp = []
       this.getList()
     }
   },
@@ -37,7 +41,26 @@ export default {
         url: this.urlobj.url,
         data: this.urlobj.params
       });
-      this.videowp = res.videowp
+      if (res.videowp.length === 0) {
+        this.hasMore = false
+        this.showToast()
+        return
+      }
+      this.videowp = [...this.videowp, ...res.videowp]
+    },
+    handleScrollTolower () {
+      if (this.hasMore) {
+        this.urlobj.params.skip += this.urlobj.params.limit
+        this.getList()
+      } else {
+        this.showToast()
+      }
+    },
+    handleGoVideo (item) {
+      getApp().globalData.video = item
+      uni.navigateTo({
+        url: '/pages/videoPlay/index'
+      })
     }
   }
 }

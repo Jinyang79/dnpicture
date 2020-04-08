@@ -16,7 +16,7 @@
         <video-main :urlobj="{url:items[current].url,params:items[current].params}"></video-main>
       </view>
       <view v-if="current === 4">
-        <video-category></video-category>
+        <video-category :urlobj='{url:items[current].url}'></video-category>
       </view>
 
     </view>
@@ -41,8 +41,8 @@ export default {
         { title: "推荐", url: 'http://157.122.54.189:9088/videoimg/v1/videowp/featured', params: { limit: 30, skip: 0, order: 'hot' } },
         { title: "娱乐", url: 'http://157.122.54.189:9088/videoimg/v1/videowp/category/59b25abbe7bce76bc834198a', params: { limit: 30, skip: 0, order: 'new' } },
         { title: "最新", url: 'http://157.122.54.189:9088/videoimg/v1/videowp/videowp', params: { limit: 30, skip: 0, order: 'new' } },
-        { title: "热门", url: 'http://157.122.54.189:9088/videoimg/v1/videowp/videowp', params: { limit: 30, skip: 0, order: 'hot' } },
-        { title: "分类", url: 'http://157.122.54.189:9088/videoimg/v1/videowp/category', params: {} }
+        { title: "热门", url: 'http://157.122.54.189:9088/videoimg/v1/videowp/videowp', params: { limit: 30, skip: 0, order: 'hot' } }
+        //{ title: "分类", url: 'http://157.122.54.189:9088/videoimg/v1/videowp/category', params: {} }
       ],
       current: 0
     }
