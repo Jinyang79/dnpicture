@@ -40,7 +40,7 @@
     "core-js": "^3.6.4",
     "flyio": "^0.6.2",
     "moment": "^2.24.0",
-    "node-sass": "^4.13.1",
+    "node-sass": "^7.0.0",
     "regenerator-runtime": "^0.12.1",
     "sass-loader": "^8.0.2",
     "vue": "^2.6.11",
